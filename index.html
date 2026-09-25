@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Public APIs Explorer</title>
+<meta name="description" content="Fast, searchable directory of free public APIs — browse by category, auth, HTTPS and CORS support." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">{ }</span>
+      <span class="brand-name">Public APIs Explorer</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="ghost-btn" href="https://github.com/public-apis/public-apis" target="_blank" rel="noopener">Source list ↗</a>
+      <button id="themeToggle" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Find your next public API</h1>
+    <p id="heroStats">Loading…</p>
+    <div class="search-row">
+      <input id="searchInput" type="search" placeholder="Search by name or description… (press /)" aria-label="Search APIs" autocomplete="off" />
+      <button id="clearSearch" class="ghost-btn" type="button" title="Clear search">Clear</button>
+    </div>
+  </div>
+</section>
+
+<main id="main" class="layout">
+  <aside class="sidebar" aria-label="Categories">
+    <div class="sidebar-head">
+      <h2>Categories</h2>
+      <button id="resetFilters" class="link-btn" type="button">Reset</button>
+    </div>
+    <ul id="categoryList" class="category-list"></ul>
+  </aside>
+
+  <section class="content">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="authFilter">Auth</label>
+        <select id="authFilter"><option value="">Any</option></select>
+      </div>
+      <div class="filter-group">
+        <label for="httpsFilter">HTTPS</label>
+        <select id="httpsFilter">
+          <option value="">Any</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="corsFilter">CORS</label>
+        <select id="corsFilter">
+          <option value="">Any</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortSelect">Sort</label>
+        <select id="sortSelect">
+          <option value="name">Name (A–Z)</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
+      <label class="checkbox-group">
+        <input id="favOnly" type="checkbox" />
+        <span>★ Favorites only</span>
+      </label>
+    </div>
+
+    <div class="result-bar">
+      <span id="resultCount"></span>
+      <div id="activeChips" class="chips"></div>
+    </div>
+
+    <div id="grid" class="grid" aria-live="polite"></div>
+    <div id="sentinel" class="sentinel"></div>
+    <p id="emptyState" class="empty-state" hidden>No APIs match your filters. Try clearing some.</p>
+  </section>
+</main>
+
+<button id="backToTop" class="back-to-top" type="button" title="Back to top" hidden>↑</button>
+
+<footer class="site-footer">
+  <p>Data sourced from the <a href="https://github.com/public-apis/public-apis" target="_blank" rel="noopener">public-apis</a> community list · Built for fast, offline-friendly browsing.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
