@@ -4,6 +4,7 @@
   const BATCH_SIZE = 60;
   const FAV_KEY = "pae:favorites";
   const THEME_KEY = "pae:theme";
+  const LINK_LABELS = { ok: "Working", blocked: "Bot-protected", broken: "Possibly down" };
 
   const state = {
     all: [],
@@ -13,6 +14,7 @@
     auth: "",
     https: "",
     cors: "",
+    linkStatus: "",
     sort: "name",
     query: "",
     favOnly: false,
@@ -32,6 +34,7 @@
     authFilter: document.getElementById("authFilter"),
     httpsFilter: document.getElementById("httpsFilter"),
     corsFilter: document.getElementById("corsFilter"),
+    linkFilter: document.getElementById("linkFilter"),
     sortSelect: document.getElementById("sortSelect"),
     favOnly: document.getElementById("favOnly"),
     resetFilters: document.getElementById("resetFilters"),
@@ -172,6 +175,7 @@
     if (state.auth) list = list.filter((i) => (i.auth || "No") === state.auth);
     if (state.https) list = list.filter((i) => i.https === state.https);
     if (state.cors) list = list.filter((i) => i.cors === state.cors);
+    if (state.linkStatus) list = list.filter((i) => i.linkStatus === state.linkStatus);
     if (state.favOnly) list = list.filter((i) => state.favorites.has(favKey(i)));
     if (q) {
       list = list.filter(
@@ -208,6 +212,7 @@
     if (state.auth) chips.push(["auth", `Auth: ${state.auth}`]);
     if (state.https) chips.push(["https", `HTTPS: ${state.https}`]);
     if (state.cors) chips.push(["cors", `CORS: ${state.cors}`]);
+    if (state.linkStatus) chips.push(["linkStatus", `Link: ${LINK_LABELS[state.linkStatus]}`]);
     if (state.favOnly) chips.push(["favOnly", "Favorites only"]);
     if (state.query) chips.push(["query", `"${state.query}"`]);
 
@@ -240,6 +245,9 @@
     } else if (key === "cors") {
       state.cors = "";
       el.corsFilter.value = "";
+    } else if (key === "linkStatus") {
+      state.linkStatus = "";
+      el.linkFilter.value = "";
     } else if (key === "favOnly") {
       state.favOnly = false;
       el.favOnly.checked = false;
@@ -340,6 +348,14 @@
     card.appendChild(head);
     card.appendChild(cat);
     card.appendChild(desc);
+
+    if (item.linkStatus === "broken") {
+      const warn = document.createElement("p");
+      warn.className = "link-warning";
+      warn.textContent = "⚠ Link didn't respond in our last check — may be down or moved";
+      card.appendChild(warn);
+    }
+
     card.appendChild(badgeRow);
 
     return card;
@@ -381,6 +397,10 @@
       state.cors = e.target.value;
       applyFilters();
     });
+    el.linkFilter.addEventListener("change", (e) => {
+      state.linkStatus = e.target.value;
+      applyFilters();
+    });
     el.sortSelect.addEventListener("change", (e) => {
       state.sort = e.target.value;
       applyFilters();
@@ -395,12 +415,14 @@
       state.auth = "";
       state.https = "";
       state.cors = "";
+      state.linkStatus = "";
       state.query = "";
       state.favOnly = false;
       el.searchInput.value = "";
       el.authFilter.value = "";
       el.httpsFilter.value = "";
       el.corsFilter.value = "";
+      el.linkFilter.value = "";
       el.favOnly.checked = false;
       syncCategoryButtons();
       applyFilters();
@@ -441,7 +463,10 @@
       return;
     }
     const categoryCount = new Set(state.all.map((i) => i.category)).size;
-    el.heroStats.textContent = `${state.all.length.toLocaleString()} free APIs across ${categoryCount} categories — search, filter, and save favorites.`;
+    const brokenCount = state.all.filter((i) => i.linkStatus === "broken").length;
+    el.heroStats.textContent =
+      `${state.all.length.toLocaleString()} free APIs across ${categoryCount} categories — search, filter, and save favorites. ` +
+      `${brokenCount.toLocaleString()} links were unreachable in our last check (filter by "Possibly down" to review).`;
     buildCategorySidebar();
     buildAuthOptions();
     applyFilters();

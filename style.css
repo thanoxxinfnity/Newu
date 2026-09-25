@@ -264,6 +264,7 @@ a { color: var(--accent); }
 .fav-btn.active { color: #f5b400; }
 
 .card-desc { color: var(--text-muted); font-size: 0.87rem; margin: 0; flex: 1; }
+.link-warning { color: var(--danger); font-size: 0.78rem; margin: 0; font-weight: 600; }
 .card-cat { font-size: 0.72rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: .02em; }
 
 .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
