@@ -14,7 +14,7 @@
     auth: "",
     https: "",
     cors: "",
-    linkStatus: "",
+    linkStatus: "ok",
     sort: "name",
     query: "",
     favOnly: false,
@@ -463,10 +463,12 @@
       return;
     }
     const categoryCount = new Set(state.all.map((i) => i.category)).size;
+    const okCount = state.all.filter((i) => i.linkStatus === "ok").length;
     const brokenCount = state.all.filter((i) => i.linkStatus === "broken").length;
     el.heroStats.textContent =
-      `${state.all.length.toLocaleString()} free APIs across ${categoryCount} categories — search, filter, and save favorites. ` +
-      `${brokenCount.toLocaleString()} links were unreachable in our last check (filter by "Possibly down" to review).`;
+      `${state.all.length.toLocaleString()} free APIs across ${categoryCount} categories. ` +
+      `Showing ${okCount.toLocaleString()} verified-working by default — switch "Link status" to Any to see all, ` +
+      `${brokenCount.toLocaleString()} were unreachable in our last check.`;
     buildCategorySidebar();
     buildAuthOptions();
     applyFilters();
