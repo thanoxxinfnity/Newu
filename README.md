@@ -25,7 +25,7 @@ a `linkStatus`:
 
 Entries flagged `broken` show a warning on their card and can be
 filtered via the "Link status" dropdown. This is a point-in-time check
-against the live public-apis list (1,448 ok / 220 blocked / 240 broken
+against the live public-apis list (1,439 ok / 215 blocked / 254 broken
 as of the last run) — the upstream README is community-maintained, so
 some churn is expected. Re-run the check with:
 
